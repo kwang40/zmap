@@ -36,7 +36,7 @@
 #include "send.h"
 #include "recv.h"
 #include "state.h"
-#include "monitor.h"
+//#include "monitor.h"
 #include "get_gateway.h"
 #include "filter.h"
 #include "summary.h"
@@ -107,7 +107,7 @@ static void *start_mon(void *arg)
 	mon_start_arg_t *mon_arg = (mon_start_arg_t *)arg;
 	log_debug("zmap", "Pinning monitor thread to core %u", mon_arg->cpu);
 	set_cpu(mon_arg->cpu);
-	monitor_run(mon_arg->it, mon_arg->recv_ready_mutex);
+	//monitor_run(mon_arg->it, mon_arg->recv_ready_mutex);
 	free(mon_arg);
 	return NULL;
 }
