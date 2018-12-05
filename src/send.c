@@ -330,25 +330,6 @@ int send_run(sock_t st, shard_t *s)
 			}
 		}
 
-		// Check all the ways a send thread could finish and break out
-		// of the send loop.
-		if (zrecv.complete) {
-			break;
-		}
-		if (s->state.max_targets &&
-		    (s->state.sent >= s->state.max_targets ||
-		     s->state.tried_sent >= s->state.max_targets)) {
-			log_debug(
-			    "send",
-			    "send thread %hhu finished (max targets of %u reached)",
-			    s->thread_id, s->state.max_targets);
-			break;
-		}
-		if (zconf.max_runtime &&
-		    zconf.max_runtime <= now() - zsend.start) {
-			break;
-		}
-
 		// Actually send a packet.
 		for (int i = 0; i < zconf.packet_streams; i++) {
 			count++;
