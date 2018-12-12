@@ -276,21 +276,13 @@ int send_run(sock_t st, shard_t *s)
 	// Get the initial IP to scan.
 	int attempts = zconf.num_retries + 1;
 	uint32_t idx = 0;
-	char input_str[100];
-	FILE *f = fopen("zmapSendLog.txt", "w");
 	while(1) {
-		memset(input_str, 0, sizeof(input_str));
 		int n1, n2, n3, n4;
 		lock_file(stdin);
-		scanf("%s", &input_str);
-		if(finish_send || sscanf(input_str, "%u.%u.%u.%u", &n1, &n2, &n3, &n4) != 4) {
+		if(finish_send || scanf("%u.%u.%u.%u", &n1, &n2, &n3, &n4) != 4) {
 			finish_send = 1;
 		}
 		unlock_file(stdin); 
-		time_t mytime = time(NULL);
-    	char * time_str = ctime(&mytime);
-    	time_str[strlen(time_str)-1] = '\0';
-		fprintf(f, "%s: %s\n", time_str, input_str);
 		if (finish_send) {
 			printf("Finished reading.\n");
 			break;
