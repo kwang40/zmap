@@ -56,7 +56,7 @@ void handle_packet(uint32_t buflen, const u_char *bytes)
 		zrecv.validation_passed++;
 	}
 	// woo! We've validated that the packet is a response to our scan
-	int is_repeat = false;//pbm_check(seen, ntohl(src_ip));
+	int is_repeat = 0;//pbm_check(seen, ntohl(src_ip));
 	// track whether this is the first packet in an IP fragment.
 	if (ip_hdr->ip_off & IP_MF) {
 		zrecv.ip_fragments++;
