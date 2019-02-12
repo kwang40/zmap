@@ -278,15 +278,22 @@ int send_run(sock_t st, shard_t *s)
 	uint32_t idx = 0;
 	while(1) {
 		unsigned int n1, n2, n3, n4;
+
 		lock_file(stdin);
 		if(finish_send || scanf("%u.%u.%u.%u", &n1, &n2, &n3, &n4) != 4) {
 			finish_send = 1;
 		}
 		unlock_file(stdin);
 		if (finish_send) {
-			printf("Finished reading.\n");
 			break;
 		}
+    // Output the ip with # sign at begining
+    char ipStr[30];
+    memset(ipStr, 0, 30);
+    sprintf(ipStr, "#%d.%d.%d.%d\n", n1, n2, n3, n4);
+    lock_file(stdout);
+    printf("%s", ipStr);
+    unlock_file(stdout);
 		int32_t raw_ip_addr = (n1 & 0xFF) << 24 | (n2 & 0xFF) << 16 | (n3 & 0xFF) << 8 | (n4 & 0xFF);
 		int32_t ip_addr = ntohl(raw_ip_addr);
 		send_rate = (double)zconf.rate / zconf.senders;
