@@ -101,7 +101,7 @@ int csv_process(fieldset_t *fs)
 		} else if (f->type == FS_BOOL) {
 			pos += sprintf(line, "%" PRIi32, (int)f->value.num);
 		} else if (f->type == FS_BINARY) {
-			hex_encode(f, (unsigned char *)f->value.ptr, f->len);
+			hex_encode(file, (unsigned char *)f->value.ptr, f->len);
 		} else if (f->type == FS_NULL) {
 			// do nothing
 		} else {
