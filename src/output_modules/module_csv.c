@@ -83,7 +83,7 @@ int csv_process(fieldset_t *fs)
 	// Build a string in advance to make sure the whole string is written at once
 	// The whole string length should be less than 256
 	char line[256];
-	memset(line, 0, 256)
+	memset(line, 0, 256);
 	int pos = 0;
 	for (int i = 0; i < fs->len; i++) {
 		field_t *f = &(fs->fields[i]);
