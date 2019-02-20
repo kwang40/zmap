@@ -80,30 +80,36 @@ int csv_process(fieldset_t *fs)
 	if (!file) {
 		return EXIT_SUCCESS;
 	}
+	// Build a string in advance to make sure the whole string is written at once
+	// The whole string length should be less than 256
+	char line[256];
+	memset(line, 0, 256)
+	int pos = 0;
 	for (int i = 0; i < fs->len; i++) {
 		field_t *f = &(fs->fields[i]);
 		if (i) {
-			fprintf(file, ",");
+			pos += sprintf(line+pos, ",");
 		}
 		if (f->type == FS_STRING) {
 			if (strchr((char *)f->value.ptr, ',')) {
-				fprintf(file, "\"%s\"", (char *)f->value.ptr);
+				pos += sprintf(line+pos, "\"%s\"", (char *)f->value.ptr);
 			} else {
-				fprintf(file, "%s\n", (char *)f->value.ptr);
+				pos += sprintf(line+pos, "%s", (char *)f->value.ptr);
 			}
 		} else if (f->type == FS_UINT64) {
-			fprintf(file, "%" PRIu64, (uint64_t)f->value.num);
+			pos += sprintf(line, "%" PRIu64, (uint64_t)f->value.num);
 		} else if (f->type == FS_BOOL) {
-			fprintf(file, "%" PRIi32, (int)f->value.num);
+			pos += sprintf(line, "%" PRIi32, (int)f->value.num);
 		} else if (f->type == FS_BINARY) {
-			hex_encode(file, (unsigned char *)f->value.ptr, f->len);
+			hex_encode(f, (unsigned char *)f->value.ptr, f->len);
 		} else if (f->type == FS_NULL) {
 			// do nothing
 		} else {
 			log_fatal("csv", "received unknown output type");
 		}
 	}
-	//fprintf(file, "\n");
+	sprintf(line+pos, "\n");
+	fprintf(file, line);
 	fflush(file);
 	check_and_log_file_error(file, "csv");
 	return EXIT_SUCCESS;
