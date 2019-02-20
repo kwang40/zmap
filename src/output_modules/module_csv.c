@@ -89,7 +89,7 @@ int csv_process(fieldset_t *fs)
 			if (strchr((char *)f->value.ptr, ',')) {
 				fprintf(file, "\"%s\"", (char *)f->value.ptr);
 			} else {
-				fprintf(file, "%s", (char *)f->value.ptr);
+				fprintf(file, "%s\n", (char *)f->value.ptr);
 			}
 		} else if (f->type == FS_UINT64) {
 			fprintf(file, "%" PRIu64, (uint64_t)f->value.num);
@@ -103,7 +103,7 @@ int csv_process(fieldset_t *fs)
 			log_fatal("csv", "received unknown output type");
 		}
 	}
-	fprintf(file, "\n");
+	//fprintf(file, "\n");
 	fflush(file);
 	check_and_log_file_error(file, "csv");
 	return EXIT_SUCCESS;
